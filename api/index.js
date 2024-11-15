@@ -2,9 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
+
 dotenv.config();
 
-const app = express();
 
 const connect = async () => {
   try {
@@ -15,37 +15,38 @@ const connect = async () => {
   }
 };
 
-// mongoose.connection.on("disconnected", () => {
-//   console.log("MongoDB Disconnected");
-// });
-// mongoose.connection.on("connected", () => {
-//   console.log("MongoDB Connected");
-// });
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB Disconnected");
+});
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB Connected");
+});
 
-app.get('/', (req,res) => {
-    res.json({
-        message: "API"
-    })
-})
+const app = express();
 
-// app.listen(9000, () => {
-//   connect();
-//   console.log("App is listening on port 9000");
-// });
+app.use(express.json());
 
 
-connect()
-  .then(() => {
-    const port = 9998;
+app.listen(9999, () => {
+  connect();
+  console.log("App is listening on port 9999");
+});
 
-    app.on("error", (error) => {
-      console.log(" ERROR: ", error);
-    });
+import userRoute from "./routes/user.route.js"
+import authRoute from "./routes/auth.route.js";
 
-    app.listen(port, () => {
-      console.log(` App is running on PORT ${port} `);
-    });
-  })
-  .catch((error) => {
-    console.log(" MONGO_DB CONNECT_DB FAILED !!!! ", error);
+
+app.use('/api/test', userRoute )
+app.use('/api/user', authRoute )
+
+
+app.use((err, req, res, next) => {
+  const errorStaus = err.status || 500;
+  const errorMessage = err.message || "Something went wrong";
+  return res.status(errorStaus).json({
+    success: false,
+    status: errorStaus,
+    message: errorMessage,
+    stack: err.stack,
   });
+});
