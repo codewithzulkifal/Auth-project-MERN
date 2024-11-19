@@ -4,20 +4,23 @@ import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken"
 
 const signUp = async(req,res,next) => {
+
     try {
-        const {username, email, password} = req.body;
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(password, salt);
+        // const salt = bcrypt.genSaltSync(10);
+        // const hash = bcrypt.hashSync(req.body.password, 10);
+          const hashedPassword = bcrypt.hashSync(req.body.password, 10);
 
         const newUser = new User({
-            username: username.toLowerCase(),
-            email,
-            password: hash
-        })
+          username: req.body.username,
+          email: req.body.email,
+          password: hashedPassword
+        });
 
         await newUser.save();
 
-        res.status(201).send("User has been created")
+        res.status(201).json({
+            message: "User has been created SuccessFully"
+        })
 
     } catch (err) {
         next(err)
@@ -27,41 +30,37 @@ const signUp = async(req,res,next) => {
 
 const login = async(req, res, next) => {
     try {
-        const {username, email} = req.body;
+      const { username, email } = req.body;
 
-        const user = await User.findOne({
-            $or: [
-                {username},
-                {email}
-            ]
-        });
-        if(!user){
-            return next(createError(404, "User not Found"))
-        }
+      const user = await User.findOne({
+        $or: [{ username }, { email }],
+      });
+      if (!user) {
+        return next(createError(404, "User not Found"));
+      }
 
-        const isPasswordCorrect = await bcrypt.compare(
-          req.body.password,  user.password
-        );
-        if (!isPasswordCorrect) {
-          return next(createError(400, "Invalid Password OR Username"));
-        }
+      const isPasswordCorrect = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      if (!isPasswordCorrect) {
+        return next(createError(400, "Invalid Password OR Username"));
+      }
 
-        const token = jwt.sign(
-          { id: user._id, isAdmin: user.isAdmin },
-          process.env.JWT_SECRET
-        );
-        
-        const {password, ...otherDetails} = user._doc
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-        res
-          .cookie("accessToken", token, {
-            httpOnly: true,
-            secure: true,
-          })
-          .status(200)
-          .json({ ...otherDetails });
+      const { password, ...otherDetails } = user._doc;
 
+      const expiryDate = new Date(Date.now() + 3600000); 
 
+      res
+      .status(200)
+        .cookie("accessToken", token, {
+          httpOnly: true,
+          secure: true,
+          expires: expiryDate,
+        })
+        .json({ ...otherDetails });
     } catch (err) {
         next(err)
     }

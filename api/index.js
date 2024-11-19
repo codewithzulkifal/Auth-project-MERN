@@ -1,10 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-
+import cors from  "cors"
 
 dotenv.config();
 
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 const connect = async () => {
   try {
@@ -22,9 +25,8 @@ mongoose.connection.on("connected", () => {
   console.log("MongoDB Connected");
 });
 
-const app = express();
 
-app.use(express.json());
+
 
 
 app.listen(9999, () => {
@@ -34,6 +36,7 @@ app.listen(9999, () => {
 
 import userRoute from "./routes/user.route.js"
 import authRoute from "./routes/auth.route.js";
+
 
 
 app.use('/api/test', userRoute )

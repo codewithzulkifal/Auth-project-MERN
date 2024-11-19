@@ -55,13 +55,15 @@ const Navbar = () => {
             ))}
 
             <div className=' flex justify-center flex-col sm:flex-row gap-5 mx-32 sm:mx-0 '>
-            <button className=' focus:outline-none text-white bg-green-600 hover:bg-green-700 font-medium rounded-3xl text-base px-5
-             py-1.5 dark:bg-green-600 dark:hover:bg-green-700 active:scale-95 transition-all duration-300 '>
+            <Link className=' focus:outline-none text-white bg-green-600 hover:bg-green-700 font-medium rounded-3xl text-base px-5
+             py-1.5 dark:bg-green-600 dark:hover:bg-green-700 active:scale-95 transition-all duration-300 '
+               to='/signin'   >
                   SignIn
-            </button>
-            <button className=' text-green-600 bg-transparent border border-green-600 hover:bg-green-600 hover:text-white font-medium rounded-3xl text-base px-5 py-1.5 dark:bg-none dark:hover:bg-green-600 active:scale-95 transition-all duration-300 '>
+            </Link>
+            <Link className=' text-green-600 bg-transparent border border-green-600 hover:bg-green-600 hover:text-white font-medium rounded-3xl text-base px-5 py-1.5 dark:bg-none dark:hover:bg-green-600 active:scale-95 transition-all duration-300 '
+               to='/signup'  >
                   Join now
-            </button>
+            </Link>
 
             </div>
 
