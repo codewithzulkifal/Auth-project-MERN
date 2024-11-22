@@ -67,8 +67,54 @@ const login = async(req, res, next) => {
 }
 
 
+const google = async(req, res, next) => {
+  try {
+    
+    const user = await User.findOne({ email: req.body.email });
+    if(user){
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+      const {password: hashedPassword, ...otherDetails } = user._doc
+      
+      res
+      .status(200)
+      .cookie("accessToken", token, {
+        httpOnly: true,
+        secure: true,
+      })
+      .json({ ...otherDetails });
+    }
+    else{
+
+      const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+
+      const hashedPassword = bcrypt.hashSync(generatePassword,10)
+      const newUser = new User({
+        username: req.body.name.split(" ").join("").toLowerCase() + Math.floor(Math.random()* 10000).toString(),
+        email: req.body.email,
+        password: hashedPassword,
+        profilePic: req.body.photo,
+      })
+      await newUser.save()
+
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const { password: hashedPassword2, ...otherDetails } = newUser._doc;
+       res
+         .status(200)
+         .cookie("accessToken", token, {
+           httpOnly: true,
+           secure: true,
+         })
+         .json({ ...otherDetails });
+
+    } 
+
+  } catch (err) {
+    next(err)
+  }
+}
 
 export { 
     signUp,
-    login
+    login,
+    google
 }
