@@ -1,24 +1,27 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = new Schema({
-
+const userSchema = new Schema(
+  {
     username: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
-    password:{
-        type: String,
-        required: true,
-    }
-    
-},
-   {timestamps: true}
-)
+    password: {
+      type: String,
+      required: true,
+    },
+    profilePic: {
+      type: String,
+      default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    },
+  },
+  { timestamps: true }
+);
 
 export const User = mongoose.model("User", userSchema)

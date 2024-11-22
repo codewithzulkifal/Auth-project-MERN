@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Authgoogle from '../Components/Authgoogle'
 
 const SignUp = () => {
 
@@ -47,8 +48,7 @@ const SignUp = () => {
   return (
     <>
     <div>
-
-    <h1 className=' text-2xl font-semibold text-center my-8 mt-8 '>Sign Up</h1>
+    <h1 className=' text-2xl font-semibold text-center mb-8 mt-20 '>Sign Up</h1>
     <form action="" onSubmit={handleSubmit} className=' flex flex-col gap-10 justify-center items-center ' >
       <input type="text"
         id='username' 
@@ -71,6 +71,7 @@ const SignUp = () => {
       <button disabled={loading} type="submit" className=' bg-green-600 p-2 text-white active:scale-95 transition-all duration-300 rounded-lg' >
         {loading ? 'loading ...' : 'SignUp'}
       </button>
+      <Authgoogle/>
     </form>
 
     <div className=' flex justify-center gap-2 mt-5 s'>
