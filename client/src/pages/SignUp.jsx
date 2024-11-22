@@ -69,7 +69,7 @@ const SignUp = () => {
         className='border border-gray-500 rounded-md p-2 '
         />
       <button disabled={loading} type="submit" className=' bg-green-600 p-2 text-white active:scale-95 transition-all duration-300 rounded-lg' >
-        {loading ? 'loading' : 'SignUp'}
+        {loading ? 'loading ...' : 'SignUp'}
       </button>
     </form>
 
