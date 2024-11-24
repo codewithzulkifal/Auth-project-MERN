@@ -4,9 +4,12 @@ import { MdMenu } from "react-icons/md";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Darkmode from './Darkmode';
+import { useSelector } from 'react-redux';
 
 
 const Navbar = () => {
+
+  const {currentUser} = useSelector((state) => state.user)
 
   const headerLink = [
     {
@@ -54,18 +57,33 @@ const Navbar = () => {
               </li>
             ))}
 
-            <div className=' flex justify-center flex-col sm:flex-row gap-5 mx-32 sm:mx-0 '>
-            <Link className=' focus:outline-none text-white bg-green-600 hover:bg-green-700 font-medium rounded-3xl text-base px-5
-             py-1.5 dark:bg-green-600 dark:hover:bg-green-700 active:scale-95 transition-all duration-300 '
-               to='/signin'   >
-                  SignIn
-            </Link>
-            <Link className=' text-green-600 bg-transparent border border-green-600 hover:bg-green-600 hover:text-white font-medium rounded-3xl text-base px-5 py-1.5 dark:bg-none dark:hover:bg-green-600 active:scale-95 transition-all duration-300 '
+            {/* <div className=' flex justify-center flex-col sm:flex-row gap-5 mx-32 sm:mx-0 '> */}
+            {/* <Link className=' text-black'
+               to='/profile'   >
+                  {
+                    currentUser ? (
+                      <img src={currentUser.profilePic} alt="Profile" className='w-7 h-7 rounded-full object-cover' />
+                    ) : (
+                      SignIn
+                    )
+                  }
+            </Link> */}
+
+            <Link to='/profile'>
+            {currentUser ? (
+              <img src={currentUser.profilePicture} alt='profile' className='h-7 w-7 rounded-full object-cover' />
+            ) : (
+              <p className='text-black'>
+                Sign In
+              </p>
+            )}
+          </Link>
+            {/* <Link className=' text-green-600 bg-transparent border border-green-600 hover:bg-green-600 hover:text-white font-medium rounded-3xl text-base px-5 py-1.5 dark:bg-none dark:hover:bg-green-600 active:scale-95 transition-all duration-300 '
                to='/signup'  >
                   Join now
-            </Link>
+            </Link> */}
 
-            </div>
+            {/* </div> */}
 
           </ul>
 
